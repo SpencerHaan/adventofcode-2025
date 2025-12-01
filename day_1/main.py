@@ -1,35 +1,65 @@
 from pathlib import Path
 
-BASE_DIR = Path.cwd().parent
+class Safe:
+    def __init__(self, dial_position):
+        self.__current_dial_position = dial_position
 
-dial_position = 50
-password = 0
+    def rotate_dial(self, instruction):
+        rotation, *rest = instruction
+        distance = int("".join(rest))
 
-print(BASE_DIR)
+        zero_clicks = int(distance / 100)
+        distance = distance % 100
 
-input_file = BASE_DIR.joinpath("data/day_1.txt")
+        if distance != 0:
+            if rotation == "L":
+                next_dial_position = self.__current_dial_position - distance
+            else:
+                next_dial_position = self.__current_dial_position + distance
 
-print(f"The dial starts by pointing at {dial_position}")
-for line in input_file.open():
-    line = line.removesuffix("\n")
-    line = line.strip()
+            if next_dial_position < 0:
+                next_dial_position += 100
+            elif next_dial_position > 99:
+                next_dial_position -= 100
 
-    rotation, *rest = line
-    distance = int("".join(rest)) % 100
+            if (
+                    next_dial_position == 0
+                    or (rotation == "L" and next_dial_position > self.__current_dial_position != 0)
+                    or (rotation == "R" and next_dial_position < self.__current_dial_position)
+            ):
+                zero_clicks += 1
 
-    if rotation == "L":
-        dial_position -= distance
-    else:
-        dial_position += distance
+            self.__current_dial_position = next_dial_position
 
-    if dial_position < 0:
-        dial_position = dial_position + 100
-    elif dial_position > 99:
-        dial_position = dial_position - 100
+        return zero_clicks
 
-    if dial_position == 0:
-        password += 1
+    def dial_position(self):
+        return self.__current_dial_position
 
-    print(f"The dial is rotated {line} to point at {dial_position}")
+def run():
+    password = 0
 
-print(f"\nThe password is {password}")
+    safe = Safe(50)
+    input_file = Path.cwd().parent.joinpath("data/day_1.txt").open()
+
+    print(f"The dial starts by pointing at {safe.dial_position()}")
+    try:
+        for instruction in input_file:
+            instruction = instruction.removesuffix("\n")
+            instruction = instruction.strip()
+
+            zero_clicks = safe.rotate_dial(instruction)
+
+            if zero_clicks != 0:
+                print(f"The dial is rotated {instruction} to point at {safe.dial_position()}, zero clicks {zero_clicks}")
+            else:
+                print(f"The dial is rotated {instruction} to point at {safe.dial_position()}")
+
+            password += zero_clicks
+
+        print(f"The password is: {password}")
+    finally:
+        input_file.close()
+
+if __name__ == '__main__':
+    run()
