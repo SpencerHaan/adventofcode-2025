@@ -2,7 +2,7 @@ import unittest
 
 import day_2
 
-class TestDay1(unittest.TestCase):
+class TestDay2(unittest.TestCase):
     def test_find_place_value_divisors(self):
         test_cases = [
             (1, [1]),
@@ -41,3 +41,6 @@ class TestDay1(unittest.TestCase):
                 actual_invalid_ids = sorted(day_2.find_invalid_ids(lower, upper))
 
                 self.assertEqual(expected_invalid_ids, actual_invalid_ids)
+
+if __name__ == '__main__':
+    unittest.main()

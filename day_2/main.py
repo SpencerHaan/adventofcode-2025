@@ -1,4 +1,5 @@
-from pathlib import Path
+import puzzles
+
 
 def find_place_value_divisors(n):
     if n == 1:
@@ -40,24 +41,18 @@ def find_invalid_ids(lower, upper):
     return list(invalid_ids)
 
 def run():
-    input_file = Path.cwd().parent.joinpath("data/day_2.txt").open()
-
     invalid_ids_sum = 0
-    try:
-        for input_range in input_file.read().split(","):
-            lower, upper = input_range.split("-")
+    for input_range in puzzles.delimited("day_2"):
+        lower, upper = input_range.split("-")
 
-            invalid_ids = find_invalid_ids(int(lower), int(upper))
+        invalid_ids = find_invalid_ids(int(lower), int(upper))
 
-            if len(invalid_ids):
-                print(input_range, "has invalid IDs,", sorted(invalid_ids))
-            else:
-                print(input_range, "contains no invalid IDs")
+        if len(invalid_ids):
+            print(input_range, "has invalid IDs,", sorted(invalid_ids))
+        else:
+            print(input_range, "contains no invalid IDs")
 
-            invalid_ids_sum += sum(invalid_ids)
-
-    finally:
-        input_file.close()
+        invalid_ids_sum += sum(invalid_ids)
 
     print("The sum of the IDs is", invalid_ids_sum)
 

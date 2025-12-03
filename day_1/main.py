@@ -1,4 +1,5 @@
-from pathlib import Path
+import puzzles
+
 
 class Safe:
     def __init__(self, dial_position):
@@ -38,28 +39,23 @@ class Safe:
 
 def run():
     password = 0
-
     safe = Safe(50)
-    input_file = Path.cwd().parent.joinpath("data/day_1.txt").open()
 
     print(f"The dial starts by pointing at {safe.dial_position()}")
-    try:
-        for instruction in input_file:
-            instruction = instruction.removesuffix("\n")
-            instruction = instruction.strip()
+    for instruction in puzzles.lines("day_1"):
+        instruction = instruction.removesuffix("\n")
+        instruction = instruction.strip()
 
-            zero_clicks = safe.rotate_dial(instruction)
+        zero_clicks = safe.rotate_dial(instruction)
 
-            if zero_clicks != 0:
-                print(f"The dial is rotated {instruction} to point at {safe.dial_position()}, zero clicks {zero_clicks}")
-            else:
-                print(f"The dial is rotated {instruction} to point at {safe.dial_position()}")
+        if zero_clicks != 0:
+            print(f"The dial is rotated {instruction} to point at {safe.dial_position()}, zero clicks {zero_clicks}")
+        else:
+            print(f"The dial is rotated {instruction} to point at {safe.dial_position()}")
 
-            password += zero_clicks
+        password += zero_clicks
 
-        print(f"The password is: {password}")
-    finally:
-        input_file.close()
+    print(f"The password is: {password}")
 
 if __name__ == '__main__':
     run()
