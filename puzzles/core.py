@@ -1,6 +1,8 @@
 from contextlib import contextmanager
 from pathlib import Path
 
+from .grid import Grid
+
 
 def blob(day):
     with puzzle_file(day) as pf:
@@ -20,6 +22,11 @@ def delimited(day, delimiter=","):
     with puzzle_file(day) as pf:
         for part in pf.read().split(delimiter):
             yield part
+
+
+def grid(day):
+    with puzzle_file(day) as pf:
+        return Grid.from_string(pf.read())
 
 
 @contextmanager

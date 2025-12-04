@@ -1,48 +1,59 @@
 import puzzles
 
 
-def is_roll_accessible(grid, position, bounds):
-    x, y = position
-    w, h = bounds
+def is_roll_accessible(grid, position):
+    origin_x, origin_y = position
 
     adjacent_count = 0
-    for r in range(y - 1, y + 2):
-        if r < 0 or r >= h:
+    for y in range(origin_y - 1, origin_y + 2):
+        if y < 0 or y >= grid.height:
             continue
 
-        for c in range(x - 1, x + 2):
-            if c < 0 or c >= w or (r == y and c == x):
+        for x in range(origin_x - 1, origin_x + 2):
+            if x < 0 or x >= grid.height or (y == origin_y and x == origin_x):
                 continue
 
-            if grid[r][c] == "@":
+            if grid[x, y] == "@":
                 adjacent_count += 1
 
     return adjacent_count < 4
 
 
 def find_inaccessible_rolls(grid):
-    rows = len(grid)
-    cols = len(grid[0])
-
     inaccessible_rolls = []
 
-    for row in range(0, rows):
-        for col in range(0, cols):
-            if grid[row][col] == ".":
-                continue
-
-            if is_roll_accessible(grid, (col, row), (cols, rows)):
-                inaccessible_rolls.append((col, row))
+    for position, cell in grid:
+        if cell != "." and is_roll_accessible(grid, position):
+            inaccessible_rolls.append(position)
 
     return inaccessible_rolls
 
 
+def remove_rolls(grid):
+    inaccessible_rolls = find_inaccessible_rolls(grid)
+
+    inaccessible_rolls_count = len(inaccessible_rolls)
+    if inaccessible_rolls_count == 0:
+        return 0
+
+    for position, cell in grid:
+        if position in inaccessible_rolls:
+            grid[position] = "."
+
+    return remove_rolls(grid) + inaccessible_rolls_count
+
+
 def run():
-    blob = puzzles.blob("day_4")
-    grid = blob.split("\n")
+    grid = puzzles.grid("day_4")
+    print(grid)
 
     inaccessible_rolls = find_inaccessible_rolls(grid)
     print("Inaccessible rolls:", len(inaccessible_rolls))
+    print()
+
+    removed_rolls = remove_rolls(grid)
+    print(grid)
+    print("Removed rolls:", removed_rolls)
 
 
 if __name__ == '__main__':

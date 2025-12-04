@@ -1,8 +1,9 @@
 import unittest
 
 import day_4
+import puzzles
 
-GRID = """\
+GRID = puzzles.Grid.from_string("""\
 ..@@.@@@@.
 @@@.@.@.@@
 @@@@@.@.@@
@@ -13,11 +14,7 @@ GRID = """\
 @.@@@.@@@@
 .@@@@@@@@.
 @.@.@@@.@.\
-""".split("\n")
-
-ROWS = len(GRID)
-COLS = len(GRID[0])
-
+""")
 
 class TestDay4(unittest.TestCase):
     def test_is_roll_accessible(self):
@@ -38,7 +35,7 @@ class TestDay4(unittest.TestCase):
         ]
         for position, expected in test_cases:
             with self.subTest(test_case=position, expected=expected):
-                actual = day_4.is_roll_accessible(GRID, position, (COLS, ROWS))
+                actual = day_4.is_roll_accessible(GRID, position)
 
                 self.assertEqual(expected, actual)
 
@@ -63,6 +60,13 @@ class TestDay4(unittest.TestCase):
 
         self.assertEqual(len(expected), len(actual))
         self.assertEqual(sorted(expected), sorted(actual))
+
+    def test_remove_rolls(self):
+        expected = 43
+
+        actual = day_4.remove_rolls(GRID)
+
+        self.assertEqual(expected, actual)
 
 
 if __name__ == '__main__':
