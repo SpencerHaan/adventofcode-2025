@@ -4,6 +4,28 @@ from pathlib import Path
 from .grid import Grid
 
 
+class InputProcessor:
+    def __init__(self, string):
+        self.__string = string
+
+    def __str__(self):
+        return self.__string
+
+    def blob(self):
+        return self.__string
+
+    def lines(self):
+        for line in self.__string.split("\n"):
+            line = line.removesuffix("\n")
+            line = line.strip()
+
+            yield line
+
+    def delimited(self, delimiter = ","):
+        for part in self.__string.split(delimiter):
+            yield part
+
+
 def blob(day):
     with puzzle_file(day) as pf:
         return pf.read().removesuffix("\n")
@@ -20,9 +42,12 @@ def lines(day):
 
 def delimited(day, delimiter=","):
     with puzzle_file(day) as pf:
-        for part in pf.read().split(delimiter):
-            yield part
+        return InputProcessor(pf.read()).delimited(delimiter)
 
+def chunks(day, delimiter="\n\n"):
+    with puzzle_file(day) as pf:
+        for part in InputProcessor(pf.read()).delimited(delimiter):
+            yield InputProcessor(part.removesuffix("\n"))
 
 def grid(day):
     with puzzle_file(day) as pf:
