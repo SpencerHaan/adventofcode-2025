@@ -31,11 +31,12 @@ def blob(day):
         return pf.read().removesuffix("\n")
 
 
-def lines(day):
+def lines(day, strip = True):
     with puzzle_file(day) as pf:
         for line in pf:
             line = line.removesuffix("\n")
-            line = line.strip()
+            if strip:
+                line = line.strip()
 
             yield line
 

@@ -1,40 +1,61 @@
+import textwrap
 import unittest
 
 import day_6
 
 
-TEST_INPUT = [
-    "123 328  51 64 ",
-    " 45 64  387 23 ",
-    "  6 98  215 314",
-    "*   +   *   +  ",
-]
-
 class TestDay6(unittest.TestCase):
-    def test_transpose_problems(self):
-        expected = dict([
-            (0, ['123', '45', '6', '*']),
-            (1, ['328', '64', '98', '+']),
-            (2, ['51', '387', '215', '*']),
-            (3, ['64', '23', '314', '+']),
-        ])
+    def test_transpose_worksheet(self):
+        worksheet = textwrap.dedent("""\
+             51 64 
+            387 23 
+            215 314
+            *   +  """)
 
-        actual = day_6.transpose_problems(TEST_INPUT)
+        expected = textwrap.dedent("""\
+              4 
+            431 
+            623+
+
+            175 
+            581 
+             32*""")
+
+        actual = day_6.transpose_worksheet(worksheet)
 
         self.assertEqual(expected, actual)
 
+    def test_transcribe_problem(self):
+        test_cases = [
+            (textwrap.dedent("""\
+              4 
+            431 
+            623+"""), "+", [4, 431, 623]),
+            (textwrap.dedent("""\
+            175 
+            581 
+             32*"""), "*", [175, 581, 32])
+        ]
+        for (problem, expected_operand, expected_values) in test_cases:
+            with self.subTest(problem=problem, expected_operand=expected_operand, expected_values=expected_values):
+                actual_operand, actual_values = day_6.transcribe_problem(problem)
+
+                self.assertEqual(expected_operand, actual_operand)
+                self.assertEqual(expected_values, actual_values)
+
     def test_solve_problem(self):
         test_cases = [
-            (['123', '45', '6', '*'], 33210),
-            (['328', '64', '98', '+'], 490),
-            (['51', '387', '215', '*'], 4243455),
-            (['64', '23', '314', '+'], 401),
+            (("+", [4, 431, 623]), 1058),
+            (("*", [175, 581, 32]), 3253600),
+            (("+", [8, 248, 369]), 625),
+            (("*", [356, 24, 1]), 8544),
         ]
-        for problem, expected_result in test_cases:
-            with self.subTest(test_case=problem, expected_result=expected_result):
-                actual_result = day_6.solve_problem(problem)
+        for (operand, values), expected_result in test_cases:
+            with self.subTest(test_case=(operand, values), expected_result=expected_result):
+                actual_result = day_6.solve_problem(operand, values)
 
                 self.assertEqual(expected_result, actual_result)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,2 +1,3 @@
-from .main import transpose_problems
+from .main import transpose_worksheet
+from .main import transcribe_problem
 from .main import solve_problem
