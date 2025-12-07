@@ -3,6 +3,19 @@ from argparse import ArgumentError
 import puzzles
 
 
+def find_entry_point(diagram):
+    entry_point = None
+    for point, cell in diagram:
+        if cell == "S":
+            entry_point = point
+            break
+
+    if entry_point is None:
+        raise ArgumentError(diagram, "No entry point found")
+
+    return entry_point
+
+
 def split_beam(point):
     x, y = point
     return [
@@ -11,37 +24,33 @@ def split_beam(point):
     ]
 
 
-def analyze_manifold(diagram):
-    beam_x = None
-    start_y = None
-    for point, cell in diagram:
-        if cell == "S":
-            beam_x, start_y = point
-            break
+def analyze_manifold(diagram, from_point, forks):
+    x, y = from_point
+    y += 1
 
-    if beam_x is None or start_y is None:
-        raise ArgumentError(diagram, "No entry point found")
-
-    split_counter = 0
-    beams = {(beam_x, start_y)}
-    for y in range(start_y, diagram.height):
-        new_beams = set()
-        for beam_x, _ in beams:
-            beam = (beam_x, y)
-            if diagram[beam] == "^":
-                new_beams.update(split_beam(beam))
-                split_counter += 1
-            else:
-                new_beams.add(beam)
-        beams = new_beams
-
-    return split_counter
+    to_point = (x, y)
+    if y == diagram.height:
+        return 1
+    elif to_point in forks:
+        return forks[to_point]
+    elif diagram[x, y] == "^":
+        total_timelines = 0
+        for next_point in split_beam(to_point):
+            timelines = analyze_manifold(diagram, next_point, forks)
+            forks[next_point] = timelines
+            total_timelines += timelines
+        return total_timelines
+    else:
+        timelines = analyze_manifold(diagram, to_point, forks)
+        forks[to_point] = timelines
+        return timelines
 
 
 def run():
     diagram = puzzles.grid("day_7")
 
-    total_splits = analyze_manifold(diagram)
+    entry_point = find_entry_point(diagram)
+    total_splits = analyze_manifold(diagram, entry_point, dict())
 
     print(f"Tachyon beam is split a total of {total_splits} times")
 

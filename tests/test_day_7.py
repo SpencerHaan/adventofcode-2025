@@ -38,9 +38,9 @@ class Day7Test(unittest.TestCase):
             ...............""")
         diagram = puzzles.Grid.from_string(diagram)
 
-        expected_total_splits = 21
+        expected_total_splits = 40
 
-        actual_total_splits = day_7.analyze_manifold(diagram)
+        actual_total_splits = day_7.analyze_manifold(diagram, (7, 0), dict())
 
         self.assertEqual(expected_total_splits, actual_total_splits)
 
