@@ -1,4 +1,4 @@
-import math
+# import math
 
 import puzzles
 from puzzles import Node, Point3D
@@ -34,6 +34,30 @@ def compose_circuits(junction_boxes, shortest_count = 10):
 
     return circuits
 
+def last_disconnected_pair(junction_boxes):
+    junction_box_pairs = junction_box_pairs_by_distance(junction_boxes)
+
+    last_connected_pair = None
+    circuits = set()
+    for distance in sorted(junction_box_pairs):
+        left, right = junction_box_pairs[distance]
+
+        left_root = left.get_root()
+        right_root = right.get_root()
+
+        if left_root == right_root:
+            continue
+
+        left_root.add_child(right_root)
+        circuits.add(left_root)
+
+        if right_root in circuits:
+            circuits.remove(right_root)
+
+        last_connected_pair = (left, right)
+
+    return last_connected_pair
+
 
 def flatten_node(root):
     flattened = {Node(root.get_value())}
@@ -48,10 +72,15 @@ def run():
         x, y, z = map(int, junction_box.split(","))
         junction_boxes.append(Node(Point3D(x, y, z)))
 
-    circuits = compose_circuits(junction_boxes, shortest_count=1000)
+    # Part 1
+    # circuits = compose_circuits(junction_boxes, shortest_count=1000)
+    #
+    # circuits = list(reversed(sorted(map(lambda c: len(flatten_node(c)), circuits))))[:3]
+    # print("Largest circuits product:", math.prod(circuits))
 
-    circuits = list(reversed(sorted(map(lambda c: len(flatten_node(c)), circuits))))[:3]
-    print("Largest circuits product:", math.prod(circuits))
+    # Part 2
+    left, right = last_disconnected_pair(junction_boxes)
+    print("X coord product:", left.get_value().x * right.get_value().x)
 
 
 if __name__ == '__main__':
