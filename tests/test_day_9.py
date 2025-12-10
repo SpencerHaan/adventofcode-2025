@@ -36,6 +36,55 @@ class Day9Test(unittest.TestCase):
 
         self.assertEqual(expected_largest_area, actual_largest_area)
 
+    # def test_is_intersecting_rectangle(self):
+    #     points = [
+    #         Point2D(7, 1),
+    #         Point2D(11, 1),
+    #         Point2D(11, 7),
+    #         Point2D(9, 7),
+    #         Point2D(9, 5),
+    #         Point2D(2, 5),
+    #         Point2D(2, 3),
+    #         Point2D(7, 3),
+    #     ]
+    #     shape = day_9.create_polygon_with_stroke(points)
+    #
+    #     test_cases = [
+    #         (Point2D(7, 1), Point2D(11, 1), False),
+    #         (Point2D(7, 1), Point2D(11, 7), True),
+    #         (Point2D(7, 1), Point2D(9, 7), True),
+    #         (Point2D(7, 1), Point2D(9, 5), False),
+    #         (Point2D(7, 1), Point2D(2, 5), True),
+    #         (Point2D(7, 1), Point2D(2, 3), True),
+    #         (Point2D(7, 1), Point2D(7, 3), False),
+    #         (Point2D(11, 1), Point2D(11, 7), False),
+    #         (Point2D(11, 1), Point2D(9, 7), False),
+    #         (Point2D(11, 1), Point2D(9, 5), False),
+    #         (Point2D(11, 1), Point2D(2, 5), True),
+    #         (Point2D(11, 1), Point2D(2, 3), True),
+    #         (Point2D(11, 1), Point2D(7, 3), False),
+    #         (Point2D(11, 7), Point2D(9, 7), False),
+    #         (Point2D(11, 7), Point2D(9, 5), False),
+    #         (Point2D(11, 7), Point2D(2, 5), True),
+    #         (Point2D(11, 7), Point2D(2, 3), True),
+    #         (Point2D(11, 7), Point2D(7, 3), True),
+    #         (Point2D(9, 7), Point2D(9, 5), False),
+    #         (Point2D(9, 7), Point2D(2, 5), True),
+    #         (Point2D(9, 7), Point2D(2, 3), True),
+    #         (Point2D(9, 7), Point2D(7, 3), True),
+    #         (Point2D(9, 5), Point2D(2, 5), False),
+    #         (Point2D(9, 5), Point2D(2, 3), False),
+    #         (Point2D(9, 5), Point2D(7, 3), False),
+    #         (Point2D(2, 5), Point2D(2, 3), False),
+    #         (Point2D(2, 5), Point2D(7, 3), False),
+    #         (Point2D(2, 3), Point2D(7, 3), False),
+    #     ]
+    #     for a, b, expected in test_cases:
+    #         with self.subTest(test_case=(str(a), str(b)), expected=expected):
+    #             actual = day_9.is_intersecting_rectangle(a, b, shape)
+    #
+    #             self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()
